@@ -15,6 +15,16 @@ class HuffmanSuite extends FunSuite {
 	}
 
 
+  test("times test") {
+      new TestTrees {
+
+        val x = List('a', 'a', 'b')
+
+        assert(times(x).find(x => x._1 == 'a').get._2 == 2)
+        assert(times(x).find(x => x._1 == 'b').get._2 == 1)
+      }
+    }
+
   test("weight of a larger tree") {
     new TestTrees {
       assert(weight(t1) === 5)
