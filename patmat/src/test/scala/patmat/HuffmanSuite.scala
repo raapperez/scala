@@ -61,4 +61,20 @@ class HuffmanSuite extends FunSuite {
     }
   }
 
+  test("decode and quickEncode a very short text should be identity") {
+    new TestTrees {
+      assert(decode(t1, quickEncode(t1)("ab".toList)) === "ab".toList)
+    }
+  }
+
+  test("convert") {
+    new TestTrees {
+      val t = Fork(Fork(Leaf('a', 1), Leaf('b', 1), List('a', 'b'), 2), Leaf('d', 1), List('a','b','d'), 3)
+
+      val table = convert(t)
+
+      assert(table == List(('a',List(0, 0)), ('b',List(0, 1)), ('d',List(1))))
+
+    }
+  }
 }
