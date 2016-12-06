@@ -24,5 +24,17 @@ object mergesort {
 
   val fruits = List("apple", "pineapple", "orange", "banana")
   msort(fruits)
+
+  def squareList(xs: List[Int]): List[Int] =
+    xs match {
+      case Nil => Nil
+      case y :: ys => y * y :: squareList(ys)
+    }
+
+  def squareList2(xs: List[Int]): List[Int] =
+    xs map (x => x * x)
+
+  val sq = squareList(List(1,2,3))
+  val sq2 = squareList2(List(1,2,3))
 }
 
