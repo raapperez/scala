@@ -1,5 +1,7 @@
 package forcomp
 
+import scala.collection.JavaConverters._
+
 
 object Anagrams {
 
@@ -54,7 +56,7 @@ object Anagrams {
    *    List(('a', 1), ('e', 1), ('t', 1)) -> Seq("ate", "eat", "tea")
    *
    */
-  lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = dictionary.groupBy(word => wordOccurrences(word)).withDefaultValue(List())
+  lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = dictionary.groupBy(word => wordOccurrences(word)).withDefaultValue(List[Word]())
 
   /** Returns all the anagrams of a given word. */
   def wordAnagrams(word: Word): List[Word] = dictionaryByOccurrences(wordOccurrences(word))
@@ -163,16 +165,34 @@ object Anagrams {
    *  Note: There is only one anagram of an empty sentence.
    */
   def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
-    //Sentence = List[Word]
+    //type Sentence = List[Word]
+    //type Occurrences = List[(Char, Int)]
+
+//    val x = List(('a',2), ('b', 3)).toMap.withDefaultValue(0)
+//
+//    println(x('x'))
+//
+//    Nil
 
     if(sentence.isEmpty) List(Nil)
     else {
-      val occurrences = sentenceOccurrences(sentence)
-      val occurrencesList = combinations(occurrences)
 
-      println(occurrencesList.tail.head)
-      println(dictionaryByOccurrences.get(occurrencesList.tail.head))
-      Nil
+      def loop(occurrences: Occurrences):List[List[Word]] = {
+
+        if(occurrences.isEmpty) List(Nil)
+        else {
+          val occurrencesList = combinations(occurrences)
+
+          for {
+            pickOccurrence <- occurrencesList
+            word <- dictionaryByOccurrences(pickOccurrence)
+            tail <- loop(subtract(occurrences, pickOccurrence))
+          } yield word :: tail
+
+        }
+      }
+
+      loop(sentenceOccurrences(sentence))
     }
   }
 }
