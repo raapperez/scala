@@ -89,7 +89,7 @@ object Anagrams {
       val list = for {
         qty <- 0 to occurrences.head._2
         tailResult <- combinations(occurrences.tail)
-      } yield (if(qty == 0) List() else List((occurrences.head._1, qty))) ::: tailResult
+      } yield ((if(qty == 0) List() else List((occurrences.head._1, qty))) ::: tailResult).sortBy(p => p._1)
       list.toList
     }
   }
@@ -165,19 +165,11 @@ object Anagrams {
    *  Note: There is only one anagram of an empty sentence.
    */
   def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
-    //type Sentence = List[Word]
-    //type Occurrences = List[(Char, Int)]
-
-//    val x = List(('a',2), ('b', 3)).toMap.withDefaultValue(0)
-//
-//    println(x('x'))
-//
-//    Nil
 
     if(sentence.isEmpty) List(Nil)
     else {
 
-      def loop(occurrences: Occurrences):List[List[Word]] = {
+      def loop(occurrences: Occurrences): List[List[Word]] = {
 
         if(occurrences.isEmpty) List(Nil)
         else {
@@ -188,7 +180,6 @@ object Anagrams {
             word <- dictionaryByOccurrences(pickOccurrence)
             tail <- loop(subtract(occurrences, pickOccurrence))
           } yield word :: tail
-
         }
       }
 
