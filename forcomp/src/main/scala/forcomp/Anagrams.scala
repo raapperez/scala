@@ -101,13 +101,25 @@ object Anagrams {
    *
    *  Note: the resulting value is an occurrence - meaning it is sorted
    *  and has no zero-entries.
+   *
+   *  Hint: you can use `foldLeft`, and `-`, `apply` and `updated` operations on `Map`.
    */
   def subtract(x: Occurrences, y: Occurrences): Occurrences = {
-    val xMap = x.toMap
-    val char = y.
-    x.toMap.updated(y.head._1, )
-    y.head
-    x.foldLeft()
+
+    def loop(xMap: Map[Char, Int], y: Occurrences): Map[Char, Int] = {
+      if(y.isEmpty) xMap
+      else {
+        val yHead = y.head
+
+        val newValue = xMap(yHead._1) - yHead._2
+
+        if(newValue > 0) loop(xMap.updated(yHead._1, newValue), y.tail)
+        else loop(xMap - yHead._1, y.tail)
+      }
+    }
+
+    loop(x.toMap, y).toList
+
   }
 
   /** Returns a list of all anagram sentences of the given sentence.
@@ -150,5 +162,17 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = {
+    //Sentence = List[Word]
+
+    if(sentence.isEmpty) List(Nil)
+    else {
+      val occurrences = sentenceOccurrences(sentence)
+      val occurrencesList = combinations(occurrences)
+
+      println(occurrencesList.tail.head)
+      println(dictionaryByOccurrences.get(occurrencesList.tail.head))
+      Nil
+    }
+  }
 }
